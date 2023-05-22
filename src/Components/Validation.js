@@ -24,107 +24,8 @@ export default function Validation(props) {
   let emailValid = false
   let confirmPassowrdValid = false
 
-  // function userNameChangeHandler(e) {
-  //   if (userName.length >= 8) {
-  //     setInsertDataError((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         eUserName: ''
-  //       }
-  //     })
-  //     userNameValid = true
-  //     setUserNameColor('')
-  //   }
-  //   else {
-  //     userNameValid = false
-  //     setInsertDataError((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         eUserName: 'username must be 7 characters long'
-  //       }
-  //     })
-  //     setUserNameColor('red')
-  //   }
-  //   setUserName(e.target.value)
-  // }
 
-  // function emailChangeHandler(e) {
-  //   if (email.includes('@')) {
-  //     setInsertDataError((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         eEmail: ''
-  //       }
-  //     })
-  //     emailValid = true
-  //     setEmailColor('')
-  //   }
-  //   else {
-  //     emailValid = false
-  //     setInsertDataError((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         eEmail: 'email should incloude @'
-  //       }
-  //     })
-  //     setEmailColor('red')
-  //   }
-  //   setEmail(e.target.value)
-  // }
 
-  // function passwordChangeHandler(e) {
-  //   setPassword(e.target.value)
-  //   if (password.length >= 7) {
-  //     setInsertDataError((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         ePassword: ''
-  //       }
-  //     })
-  //     passwordValid = true
-  //     setPasswordColor('')
-  //   }
-  //   else {
-  //     passwordValid = false
-  //     setInsertDataError((prevState) => {
-  //       return {
-  //         ...prevState,
-  //         ePassword: 'password should be 7 characters long'
-  //       }
-  //     })
-  //     setPasswordColor('red')
-  //   }
-  // }
-
-  // function confirmPassowrdChangeHandler(e) {
-  // setConfirmPassword(e.target.value)
-  // if (password !== '' && password === confirmPassowrd) {
-  //   setInsertDataError((prevState) => {
-  //     return {
-  //       ...prevState,
-  //       eConfirmPassword: ''
-  //     }
-  //   })
-  //   confirmPassowrdValid = true
-  //   setConfirmPasswordColor('')
-  // }
-  // else {
-  //   setInsertDataError((prevState) => {
-  //     return {
-  //       ...prevState,
-  //       eConfirmPassword: 'passwords not match'
-  //     }
-  //   })
-  //   confirmPassowrdValid = false
-  //   setConfirmPasswordColor('red')
-  // }
-  // setConfirmPassword((prevState) => {
-  //   return e.target.value
-  // })
-  // setConfirmPassword(e.target.value)
-  // }
-
-  console.log(userName)
 
   function validate() {
     if (userName.length >= 8) {
@@ -142,7 +43,7 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eUserName: 'username must be 7 characters long'
+          eUserName: '!username must be 7 characters long!'
         }
       })
       setUserNameColor('red')
@@ -163,7 +64,7 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eEmail: 'email should incloude @'
+          eEmail: '!email should incloude @!'
         }
       })
       setEmailColor('red')
@@ -184,7 +85,7 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          ePassword: 'password should be 7 characters long'
+          ePassword: '!password should be 7 characters long!'
         }
       })
       setPasswordColor('red')
@@ -204,22 +105,14 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eConfirmPassword: 'passwords not match'
+          eConfirmPassword: '!passwords not match!'
         }
       })
       confirmPassowrdValid = false
       setConfirmPasswordColor('red')
     }
-    // setConfirmPassword((prevState) => {
-    //   return e.target.value
-    // })
-    // setConfirmPassword(e.target.value)
 
 
-
-    // if (!userNameValid || !emailValid || !passwordValid || !confirmPassowrdValid) {
-    //   return props.handlerShowLogIn()
-    // }
   }
 
   function submitHandler(e) {
@@ -244,21 +137,21 @@ export default function Validation(props) {
 
             <input type="text" placeholder='username' className="form-control" style={{ borderColor: userNameColor }} value={userName} onChange={(e) => setUserName(e.target.value)} />
 
-            <span>{insertDataError.eUserName}</span>
+            <p>{insertDataError.eUserName}</p>
 
             <input type="text" placeholder='email' className="form-control" value={email} style={{ borderColor: emailColor }} onChange={(e) => setEmail(e.target.value)} />
 
-            <span>{insertDataError.eEmail}</span>
+            <p>{insertDataError.eEmail}</p>
 
             <input type="password" placeholder='password' className="form-control" value={password} style={{ borderColor: passwordColor }} onChange={(e) => setPassword(e.target.value)} />
 
-            <span>{insertDataError.ePassword}</span>
+            <p>{insertDataError.ePassword}</p>
 
             <input type="password" placeholder='confirm password' className="form-control" value={confirmPassowrd} style={{ borderColor: confirmPasswordColor }} onChange={(e) => setConfirmPassword(e.target.value)} />
 
-            <span>{insertDataError.eConfirmPassword}</span>
+            <p>{insertDataError.eConfirmPassword}</p>
 
-            <h1><button type="submit" /*disabled={!userNameValid || !emailValid || !passwordValid || !confirmPassowrdValid}*/ className='btn btn-success'  >SUBMIT</button></h1>
+            <h1><button type="submit" className='btn btn-success'>SUBMIT</button></h1>
 
           </div>
 

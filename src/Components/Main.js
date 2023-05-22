@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 
 export default function Main() {
+
   const [taskList, setTaskList] = useState([]);
   const [taskData, setTaskData] = useState({
     id: Date.now(),
@@ -21,32 +22,6 @@ export default function Main() {
     clearInputHandler(e)
   }
 
-  function sendHandler(index) {
-    let newTaskData = { ...taskList[index] }
-    newTaskData.sent = true
-    let newTaskList = taskList.filter(item => item.id !== newTaskData.id)
-    setTaskList([newTaskData, ...newTaskList])
-  }
-
-  const taskListContent = taskList.map((task, index) => {
-
-    const style = { backgroundColor: 'green' }
-
-    return (
-      <div key={index}>
-        <div className='list-people' style={task.sent ? style : {}}>
-          <p>{task.selectFirstName} {task.selectName}</p>
-          <p>{task.taskName}</p>
-          <p>{task.selectImportant}</p>
-          <p>{task.startDate}</p>
-          {!task.sent && <button className='btn btn-success' onClick={() => sendHandler(index)}>SEND</button>}
-          <i className="fa fa-trash" aria-hidden="true" onClick={() => deleteTask(index)}></i>
-        </div>
-      </div>
-    )
-  })
-
-
   function clearInputHandler(e) {
     setTaskData({
       id: Date.now(),
@@ -58,6 +33,32 @@ export default function Main() {
       sent: false
     })
   }
+
+  const taskListContent = taskList.map((task, index) => {
+
+    const style = { backgroundColor: 'green' }
+
+    return (
+      <div key={index}>
+        <div className='list-people' style={task.sent ? style : {}}>
+          <span>{task.selectFirstName} {task.selectName}</span>
+          <span>{task.taskName}</span>
+          <span>{task.selectImspanortant}</span>
+          <span>{task.startDate}</span>
+          {!task.sent && <button className='btn btn-success' onClick={() => sendHandler(index)}>SEND</button>}
+          <i className="fa fa-trash" aria-hidden="true" onClick={() => deleteTask(index)}></i>
+        </div>
+      </div>
+    )
+  })
+
+  function sendHandler(index) {
+    let newTaskData = { ...taskList[index] }
+    newTaskData.sent = true
+    let newTaskList = taskList.filter(item => item.id !== newTaskData.id)
+    setTaskList([newTaskData, ...newTaskList])
+  }
+
 
   function deleteTask(index) {
     var duparray = [...taskList]
@@ -101,7 +102,7 @@ export default function Main() {
               }} />
             </form>
             <label>
-              <p>How Important ?</p>
+              <span>How Important ?  </span>
               <select value={taskData.selectImportant} onChange={(e) => {
                 setTaskData((prev) => {
                   prev.selectImportant = e.target.value

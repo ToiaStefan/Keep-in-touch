@@ -18,11 +18,13 @@ function App() {
   if (showLogIn === true) {
     shownComponent = <Validation handlerShowLogIn={showLogInHandler} />
   } else {
+
     shownComponent = <Main />
   }
   return (
     <div className="App">
       {shownComponent}
+      <Main />
     </div>
   )
 }
