@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { auth } from "../utils";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Validation(props) {
 
@@ -24,9 +26,6 @@ export default function Validation(props) {
   let emailValid = false
   let confirmPassowrdValid = false
 
-
-
-
   function validate() {
     if (userName.length >= 8) {
       setInsertDataError((prevState) => {
@@ -43,7 +42,7 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eUserName: '!username must be 7 characters long!'
+          eUserName: 'username must be 7 characters long and should incloude "Dr."!'
         }
       })
       setUserNameColor('red')
@@ -64,7 +63,7 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eEmail: '!email should incloude @!'
+          eEmail: 'email should incloude @!'
         }
       })
       setEmailColor('red')
@@ -85,7 +84,7 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          ePassword: '!password should be 7 characters long!'
+          ePassword: 'password must be 7 characters long!'
         }
       })
       setPasswordColor('red')
@@ -105,14 +104,12 @@ export default function Validation(props) {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eConfirmPassword: '!passwords not match!'
+          eConfirmPassword: 'passwords not match!'
         }
       })
       confirmPassowrdValid = false
       setConfirmPasswordColor('red')
     }
-
-
   }
 
   function submitHandler(e) {
@@ -120,43 +117,33 @@ export default function Validation(props) {
     validate()
 
     if (userNameValid && emailValid && passwordValid && confirmPassowrdValid) {
-      return props.handlerShowLogIn()
+      createUserWithEmailAndPassword(auth, email, password).then((data) => console.log(data))
+      return props.handlershowValidation()
     }
   }
-
-
 
   return (
     <form onSubmit={(e) => submitHandler(e)}>
       <div>
         <div className="row justify-content-center">
-
           <div className="col-md-5 shadow-lg p-3 mb-5 bg-white rounded">
-
             <h1>Create an account</h1>
 
             <input type="text" placeholder='username' className="form-control" style={{ borderColor: userNameColor }} value={userName} onChange={(e) => setUserName(e.target.value)} />
-
             <p>{insertDataError.eUserName}</p>
 
             <input type="text" placeholder='email' className="form-control" value={email} style={{ borderColor: emailColor }} onChange={(e) => setEmail(e.target.value)} />
-
             <p>{insertDataError.eEmail}</p>
 
             <input type="password" placeholder='password' className="form-control" value={password} style={{ borderColor: passwordColor }} onChange={(e) => setPassword(e.target.value)} />
-
             <p>{insertDataError.ePassword}</p>
 
             <input type="password" placeholder='confirm password' className="form-control" value={confirmPassowrd} style={{ borderColor: confirmPasswordColor }} onChange={(e) => setConfirmPassword(e.target.value)} />
-
             <p>{insertDataError.eConfirmPassword}</p>
 
             <h1><button type="submit" className='btn btn-success'>SUBMIT</button></h1>
-
           </div>
-
         </div>
-
       </div>
     </form>
 
