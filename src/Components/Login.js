@@ -1,5 +1,10 @@
+import React, { useEffect, useState, useContext } from 'react'
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
 import userEvent from '@testing-library/user-event'
-import React, { useState } from 'react'
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { auth, app } from '../utils.js'
+import { Button, Modal, Form } from 'react-bootstrap';
+import AuthContext from '../store/auth-context.js';
 
 export default function Login(props) {
 
@@ -9,10 +14,12 @@ export default function Login(props) {
     eEmail: '',
     ePassword: '',
   })
+  const [mainTransfer, setMainTransfer] = useState(false)
+  const navigate = useNavigate()
+  const authContext = useContext(AuthContext)
 
   let emailValid = false
   let passwordValid = false
-
 
   function validateLogIn() {
     if (email.includes('@')) {
@@ -21,16 +28,16 @@ export default function Login(props) {
           ...prevState,
           eEmail: '',
         }
-        emailValid = true
       })
+      emailValid = true
     } else {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          eEmail: '!The email you entered is not connected to an account. Please try again!',
+          eEmail: 'The email you entered is not connected to an account. Please try again!',
         }
-        emailValid = false
       })
+      emailValid = false
     }
     if (password.length >= 7) {
       setInsertDataError((prevState) => {
@@ -38,46 +45,64 @@ export default function Login(props) {
           ...prevState,
           ePassword: '',
         }
-        passwordValid = true
       })
+      passwordValid = true
     } else {
       setInsertDataError((prevState) => {
         return {
           ...prevState,
-          ePassword: '!Incorrect password!',
+          ePassword: 'Incorrect password!',
         }
-        passwordValid = false
       })
+      passwordValid = false
     }
   }
 
   function logInHandler(e) {
     e.preventDefault()
     validateLogIn()
-    if (emailValid || passwordValid) {
-      return props.handlerShowLogIn()
+
+    if (emailValid && passwordValid) {
+      console.log(emailValid, passwordValid)
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user
+          navigate('/')
+          console.log('Logged in successfully:', user)
+        })
+        .catch((error) => {
+          setInsertDataError((prevState) => ({
+            ...prevState,
+            eEmail: 'Login failed. Please try again',
+            ePassword: ''
+          }))
+          console.error('Login error', error)
+        })
     }
   }
 
-
-
   return (
-    <form onSubmit={(e) => logInHandler(e)}>
-      <div>
-        <div className="row justify-content-center">
-          <div className="col-md-5 shadow-lg p-3 mb-5 bg-white rounded">
-            <h1>Log In</h1>
+    <div>
+      {/* {mainTransfer && <Navigate to="/Main" />} */}
+      <form onSubmit={(e) => logInHandler(e)}>
+        <div>
+          <div className="row justify-content-center">
+            <div className="col-md-5 shadow-lg p-3 mb-5 bg-white rounded">
+              <h1>Log In</h1>
 
-            <input type='text' placeholder='email' className='form-control' value={email} onChange={(e) => setEmail(e.target.value)} />
-            <p>{insertDataError.eEmail}</p>
+              <input type='text' placeholder='email' className='form-control' value={email} onChange={(e) => setEmail(e.target.value)} />
+              <p>{insertDataError.eEmail}</p>
 
-            <input type="password" placeholder='password' className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <p>{insertDataError.ePassword}</p>
+              <input type="password" placeholder='password' className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <p>{insertDataError.ePassword}</p>
 
-            <h1><button type='submit' className='btn btn-success' >Log In</button></h1>
+              <h1><button type='submit' className='btn btn-success'>Log In</button></h1>
+              <span>Create An Account{""}
+                <Link to='/Validation'> Here</Link></span>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   )
 }

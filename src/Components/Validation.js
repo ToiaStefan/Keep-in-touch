@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "../utils";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, app } from '../utils.js';
+import { Link } from "react-router-dom";
 
 export default function Validation(props) {
 
@@ -8,14 +9,12 @@ export default function Validation(props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassowrd, setConfirmPassword] = useState('')
-
   const [insertDataError, setInsertDataError] = useState({
     eUserName: '',
     eEmail: '',
     ePassword: '',
     eConfirmPassword: '',
   })
-
   const [userNameColor, setUserNameColor] = useState('')
   const [emailColor, setEmailColor] = useState('')
   const [passwordColor, setPasswordColor] = useState('')
@@ -117,8 +116,16 @@ export default function Validation(props) {
     validate()
 
     if (userNameValid && emailValid && passwordValid && confirmPassowrdValid) {
-      createUserWithEmailAndPassword(auth, email, password).then((data) => console.log(data))
-      return props.handlershowValidation()
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((data) => {
+          const user = data.user
+          console.log('User registered:', user)
+        })
+        .catch((error) => {
+          const errorCode = error.code
+          const errorMessage = error.message
+          console.error('Registration error:', errorCode, errorMessage)
+        })
     }
   }
 
@@ -142,6 +149,11 @@ export default function Validation(props) {
             <p>{insertDataError.eConfirmPassword}</p>
 
             <h1><button type="submit" className='btn btn-success'>SUBMIT</button></h1>
+            <span>Already have an account?{""}
+              <Link to="/Login">
+                Log In
+              </Link>
+            </span>
           </div>
         </div>
       </div>

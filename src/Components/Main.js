@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import TaskList from './TaskList';
+import AuthContext from '../store/auth-context';
 
 
 export default function Main(props) {
@@ -14,6 +15,8 @@ export default function Main(props) {
     startDate: '',
     sent: false
   });
+
+  const authContext = useContext(AuthContext)
 
   const getTask = async () => {
     try {
@@ -146,6 +149,7 @@ export default function Main(props) {
           <br />
           <div style={{ height: '300px', overflow: 'auto' }}>
             <TaskList taskList={taskList} setTaskList={setTaskList} deleteTaskJ={deleteTaskJ} updateTask={updateTask} />
+            <button onClick={authContext.logout}>LogOut</button>
           </div>
         </div>
       </div>
