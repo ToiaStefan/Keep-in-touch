@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, app } from '../utils.js';
 import { Link } from "react-router-dom";
+import AuthContext from "../store/auth-context";
+import { useContext } from "react";
 
 export default function Validation(props) {
 
@@ -24,6 +26,8 @@ export default function Validation(props) {
   let passwordValid = false
   let emailValid = false
   let confirmPassowrdValid = false
+
+  const authContext = useContext(AuthContext)
 
   function validate() {
     if (userName.length >= 8) {
@@ -116,9 +120,11 @@ export default function Validation(props) {
     validate()
 
     if (userNameValid && emailValid && passwordValid && confirmPassowrdValid) {
+
       createUserWithEmailAndPassword(auth, email, password)
         .then((data) => {
           const user = data.user
+          authContext.createUserInDataBase(user)
           console.log('User registered:', user)
         })
         .catch((error) => {

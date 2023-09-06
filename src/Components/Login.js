@@ -14,7 +14,7 @@ export default function Login(props) {
     eEmail: '',
     ePassword: '',
   })
-  const [mainTransfer, setMainTransfer] = useState(false)
+
   const navigate = useNavigate()
   const authContext = useContext(AuthContext)
 
@@ -83,7 +83,6 @@ export default function Login(props) {
 
   return (
     <div>
-      {/* {mainTransfer && <Navigate to="/Main" />} */}
       <form onSubmit={(e) => logInHandler(e)}>
         <div>
           <div className="row justify-content-center">
@@ -97,8 +96,8 @@ export default function Login(props) {
               <p>{insertDataError.ePassword}</p>
 
               <h1><button type='submit' className='btn btn-success'>Log In</button></h1>
-              <span>Create An Account{""}
-                <Link to='/Validation'> Here</Link></span>
+              <span>Create An Account!{""}
+                <Link to='/Validation'>Here</Link></span>
             </div>
           </div>
         </div>

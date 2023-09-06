@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import TaskList from './TaskList';
 import AuthContext from '../store/auth-context';
-
+import { getDatabase, ref, get, set } from 'firebase/database';
 
 export default function Main(props) {
 
@@ -20,7 +20,8 @@ export default function Main(props) {
 
   const getTask = async () => {
     try {
-      const respones = await fetch('https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/tasks.json')
+      console.log('Error get userid:', authContext.userId)
+      const respones = await fetch(`https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/users/${authContext.userId}/tasks.json`)
       const json = await respones.json()
       const processedTasks = []
       for (const key in json) {
@@ -39,7 +40,7 @@ export default function Main(props) {
   const deleteTaskJ = async (id) => {
     try {
       const response = await fetch(
-        `https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`, {
+        `https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/users/${authContext.userId}/tasks/${id}.json`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -53,7 +54,7 @@ export default function Main(props) {
     let { id, ...newTaskData } = { ...taskData }
     try {
       const respones = await fetch(
-        `https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/tasks.json`
+        `https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/users/${authContext.userId}/tasks.json`
         , {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -68,8 +69,10 @@ export default function Main(props) {
   }
 
   useEffect(() => {
-    getTask()
-  }, [])
+    if (authContext.userId !== null) {
+      getTask()
+    }
+  }, [authContext.userId])
 
   function clearInputHandler() {
     setTaskData({
@@ -89,7 +92,7 @@ export default function Main(props) {
     console.log(id, taskBody)
     try {
       const response = await fetch(
-        `https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/tasks/${id}.json`, {
+        `https://tst-react-keepintouch-default-rtdb.europe-west1.firebasedatabase.app/users/${authContext.userId}/tasks/${id}.json`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(taskBody)
@@ -149,8 +152,8 @@ export default function Main(props) {
           <br />
           <div style={{ height: '300px', overflow: 'auto' }}>
             <TaskList taskList={taskList} setTaskList={setTaskList} deleteTaskJ={deleteTaskJ} updateTask={updateTask} />
-            <button onClick={authContext.logout}>LogOut</button>
           </div>
+          <a href='#' className='logOutButton' onClick={authContext.logout}>Log Out</a>
         </div>
       </div>
     </div>

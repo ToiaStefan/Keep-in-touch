@@ -13,25 +13,8 @@ import { useContext } from 'react';
 import AuthContext from './store/auth-context';
 
 function App() {
-  // const [showValidation, setShowValidation] = useState(true)
-  // const [loggedIn, setLoggedIn] = useState(false)
+
   const authContext = useContext(AuthContext)
-
-  // if (!token) {
-  //   return <Login setAuthToken={setAuthToken} />
-  // } else {
-  //   return <Main />
-  // }
-
-  // function showValidationHandler() {
-  //   setShowValidation(false)
-  // }
-  // let shownComponent
-  // if (showValidation === true) {
-  //   shownComponent = <Validation handlershowValidation={showValidationHandler} />
-  // } else {
-  //   shownComponent = <Main />
-  // }
 
   return (
     <div className="App">
